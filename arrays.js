@@ -27,6 +27,7 @@ test.splice(5, 2);
 
 // MULTI DIMENSIONAL ARRAY:
 // day 1
+  // 1st index represents a row/day; 2nd index represents a column/hour of the day
 var avgTemp = [];
 avgTemp[0] = [];
 avgTemp[0][0] = 72;
@@ -44,3 +45,9 @@ avgTemp[1][2] = 75;
 avgTemp[1][3] = 75;
 avgTemp[1][4] = 73;
 avgTemp[1][5] = 72;
+
+for (var i = 0; i < avgTemp.length; i++){
+  for (var j = 0; j < avgTemp[i].length; j++){
+    console.log(avgTemp[i][j];
+  }
+}

@@ -1,0 +1,1 @@
+// STACK -> collection of items (LIFO) -> Last in First Out
