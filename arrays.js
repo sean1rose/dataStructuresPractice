@@ -1,3 +1,8 @@
+/* 
+DATA STRUCTURE #1
+ARRAYS 
+*/
+
 var fibonacci = [];
 fibonacci[1] = 1;
 fibonacci[2] = 1;
