@@ -112,8 +112,45 @@ class LinkedList {
 
   removeElement(element){
     // removing a particular element
+    var idx = this.indexOf(element);
+    return this.removeAt(idx);
   }
 
+  // print out all elements in order in string form
+  toString(){
+    var current = this.head;
+    var string = '';
+    while(current){
+      string += current.element;
+      current = current.next;
+    }
+    return string;
+  }
 
+  // receives element.value and returns position if element is found
+  indexOf(element){
+    var current = this.head;
+    var counter = 0;
+    while(current){
+      if (current.element === element){
+        return counter;
+      }
+      current = current.next;
+      counter++;
+    }
+    return -1;
+  }
+
+  isEmpty(){
+    return this.length === 0;
+  }
+
+  size(){
+    return this.length;
+  }
+
+  getHead(){
+    return head;
+  }
 
 }
