@@ -29,20 +29,21 @@ class LinkedList {
   // LEARN THIS DOWN PAT
   append(item){
     // add new item to end of list
-    var itemToBeAdded = new Node(item);
+    var node = new Node(item);
     var current;
     // if 1st item in LL -> make it he head...
     if (this.head === null){
-      this.head = itemToBeAdded;
+      this.head = node;
     } else {
       // start at front of LL...
       current = this.head;
       // need to find last item so loop until find the very last item...
-      while(current.next){
+      // while(current.next){
+      while(current.next !== null){
         current = current.next
       }
-      // once at the last item (there is no next item) -> make the next item the itemToBeAdded
-      current.next = itemToBeAdded;
+      // once at the last item (there is no next item) -> make the next item the node
+      current.next = node;
     }
     length++;
   }
@@ -64,7 +65,7 @@ class LinkedList {
             // increment loop
             current = current.next;
           }
-          // ***take out element at position by creating new bridge from previous to current's next...
+          // ***CUT CURRENT OUT OF THE LOOP -> take out element at position by creating new bridge from previous to current's next...
           previous.next = current.next;
           // ***this cuts current.element out of the linked-chain and forever gone from computer memory...
 
@@ -76,6 +77,7 @@ class LinkedList {
       return null;
     }
   }
+
 
   // insert at any position (similar to remove from any position, but adding a new element, rather than pointing around 1 to remove)
   insert(position, element){
