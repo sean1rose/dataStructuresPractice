@@ -25,9 +25,9 @@ class DoublyLinkedList {
     var prev;
     var counter = 0;
     var node = new Node(element);
-    // make sure inserting w/in list's bounds
-      // think about: 1) insert at 1st position, 2) insert at last position, 3) inserting in the middle...
+    // Consider 3 SCENARIOS: 1) insert at 1st position, 2) insert at last position, 3) inserting in the middle...
     if (position >= 0 && position < this.length){
+    // make sure inserting w/in list's bounds
       // 1) if inserting at 1st position...
       if (position === 0){
         // a) if no elements in the list...
@@ -78,6 +78,10 @@ class DoublyLinkedList {
     } else {
       return false;
     }
+  }
+
+  removeAt(position){
+    // Consider 3 SCENARIOS: 1) insert at 1st position, 2) insert at last position, 3) inserting in the middle...
   }
 
 }
