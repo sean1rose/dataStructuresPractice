@@ -81,7 +81,44 @@ class DoublyLinkedList {
   }
 
   removeAt(position){
-    // Consider 3 SCENARIOS: 1) insert at 1st position, 2) insert at last position, 3) inserting in the middle...
+    var current = this.head;
+    var prev;
+    var counter;
+    // Consider 3 SCENARIOS: 1) remove at 1st position, 2) remove at last position, 3) removing from the middle...
+    if (position >= 0 && position <= this.length){
+      // remove at 1st position
+      if (position === 0){
+        // setting this.head to whatever is current.next && cutting out current
+        this.head = current.next;
+        // if only 1 item..
+        if (this.length === 1){
+          this.tail = null;
+        } else {
+          this.head.prev = null;
+        }
+      } else if (position === this.length - 1){
+        // remove from last position
+        current = this.tail;
+        // this.tail = this.tail.prev; <- works as well...
+        this.tail = current.prev
+        this.tail.next = null;
+      } else {
+        // remove from middle
+        while (counter++ < position){
+          // iterate to desired position...
+          prev = current;
+          current = current.next;
+          // element we want to remove is current
+        }
+        // once you break out of loop, remove current by skipping it and updating previous.next and current.next.prev
+        prev.next = current.next;
+        current.next.previous = previous;
+      }
+      length--;
+      return current.element;
+    } else {
+      return null;
+    }
   }
 
 }

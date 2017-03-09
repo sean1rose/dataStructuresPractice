@@ -7,6 +7,7 @@ LINKED LIST
     1) a node that stores the element itself
     2) a reference that points to the next element
   +: benefit of LL over an array: don't need to shift elements over when adding/removing elements
+    + whenever you need to add and remove lots of elements, linked list > array
   -: disadvantage: w/ array can directly access any element at any position, but w/ LL, need to start from beginning and iterate until find desired element
   EX: think of a train (each vehicle is linked to the next; the link b/w the wagons is the pointer), conga line (hands == pointer to next element/person), or a scavenger hunt (clue is a pointer to the next clue/element)
 */
