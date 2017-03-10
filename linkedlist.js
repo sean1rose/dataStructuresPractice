@@ -1,5 +1,5 @@
 /* 
-DATA STRUCTURE #3
+DATA STRUCTURE #4
 LINKED LIST
   - stores a sequential collection of elements, but unlike arrays - elements are not placed contiguosuly in memory
       @ ASIDE - arrays -> disadvantage of arrays is that the size of an array is fixed (in most languages) and inserting or removing items from beginning or middle is expensive cuz items need to be shifted over (JS has native methods to do that, but still going on behind the scenes)
