@@ -32,7 +32,7 @@ class LinkedList {
     // add new item to end of list
     var node = new Node(item);
     var current;
-    // if 1st item in LL -> make it he head...
+    // if 1st item in LL -> make it the head...
     if (this.head === null){
       this.head = node;
     } else {
