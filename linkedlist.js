@@ -46,12 +46,13 @@ class LinkedList {
       // once at the last item (there is no next item) -> make the next item the node
       current.next = node;
     }
-    length++;
+    this.length++;
   }
 
   // remove from any position, given the index to remove at...
   removeAt(position){
-    if (position >= 0 && position < this.length){
+    console.log('IN LL REMOVE AT!!! ');
+    if (position > -1 && position < this.length){
       var current = this.head;
       var previous;
       var counter = 0;
@@ -72,7 +73,8 @@ class LinkedList {
 
       }
       // for counting purposes...
-      length--;
+      this.length--;
+      console.log('removing (using removeAt) - ', current.element);
       return current.element;
     } else {
       return null;
@@ -106,7 +108,7 @@ class LinkedList {
         // change link b/w previous and current
         previous.next = node;
       }
-      length++;
+      this.length++;
       return true;
     } else {
       return false;
@@ -153,7 +155,7 @@ class LinkedList {
   }
 
   getHead(){
-    return head;
+    return this.head;
   }
 
 }

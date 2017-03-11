@@ -15,7 +15,7 @@ class HashTable {
 
   // lose lose hash code (adding up the ASCII values of each character)...
     // assumes key is a STRING...
-  hashCode(key){
+  hashFunction(key){
     var hash = 0;
     for (var i = 0; i < key.length; i++){
       hash += key.charCodeAt(i);
@@ -23,18 +23,26 @@ class HashTable {
     // use modulo of prime # 37
     return hash % 37;
   }
-  
+
+  // djb2..
+  betterHashFunction(key){
+    var hash = 5381;
+    for (var i = 0; i < key.length; i++){
+      hash = hash * 33 + key.charCodeAt(i);
+    }
+    return hash % 1013;
+  }  
 
   // adds a new item to the hash table (or in the alternative, updates the key)...
   put(key, value){
     /* WITHOUT SEPARATE CHAINING COLLISION HANDLING...
-    var idx = this.hashCode(key);
+    var idx = this.hashFunction(key);
     console.log(idx + ' -> ' + key);
     this.table[idx] = value;
     */
 
     // WITH SEPARATE CHAINING...
-    var position = this.hashCode(key);
+    var position = this.hashFunction(key);
 
     if (this.table[position] == undefined){
       // if 1st element at the position (no collision yet) -> create a LL at that position...
@@ -42,41 +50,66 @@ class HashTable {
     }
     // add the ValuePair instance to the LL using the LL-append method
     this.table[position].append(new ValuePair(key, value));
+
+
+  }
+
+  // PUT USING LINEAR PROBING -> if idx is already occupied, then try idx + 1;
+  putProbe(key, value){
+    var position = this.hashFunction(key);
+    if (!this.table[position]){
+      this.table[position] = new ValuePair(key, value);
+    } else {
+      var idx = ++position;
+      // loop lasts until there's nothing at the idx...
+      while(this.table[idx] != undefined){
+        // break out once find an empty position...
+        idx++;
+      }
+      // found an empty position, set the item...
+      this.table[idx] = new ValuePair(key, value);
+    }
+
   }
 
   // removes the value from the hash table using the key...
   remove(key){
-    // var idx = this.hashCode(key);
+    // var idx = this.hashFunction(key);
     // this.table.splice(idx, 1);
     // ^ DO NOT WANT TO MUTATE THE ARRAY!!! -> will mess up hashing function and next time try to get or remove another existing element -> element will not be at correct position
 
     /* WITHOUT SEPARATE CHAINING COLLISION HANDLING...
-    var idx = this.hashCode(key);
+    var idx = this.hashFunction(key);
     var tmp = this.table[idx];
     this.table[idx] = null;
     return tmp;
     */
 
     // SEPARATE CHAINING METHOD:
-    var position = this.hashCode(key);
+    var position = this.hashFunction(key);
+
     if (this.table[position] !== undefined){
       // we know it's a LL, which has getHead() method
       var current = this.table[position].getHead();
       while(current.next){
         if (current.element.key === key){
           // use LL-remove method to remove the element
-          this.table.position.remove(current.element);
+          console.log('this.table[position], should be a LL / LL BEFORE REMOVAL is - ', this.table[position]);
+          console.log('current.element - ', current.element);
+          var tmp = this.table[position].removeElement(current.element);
           // if list is empty, set table position as undefined so can skip this position whenever we look for an element to try to print out its contents
           if (this.table[position].isEmpty()){
             this.table[position] = undefined;
           }
-          return true;
+          console.log('LL after removal is - ', this.table[position]);
+          console.log('element removed is....', tmp);
+          return tmp;
         }
         current = current.next;
       }
       // check in case 1st or last element...
       if (current.element.key === key){
-        this.table[position].remove(current.element);
+        this.table[position].removeElement(current.element);
         if (this.table[position].isEmpty()){
           this.table[position] = undefined;
         }
@@ -87,14 +120,40 @@ class HashTable {
     return false;
   }
 
+  removeProbe(key){
+    var position = this.hashFunction(key);
+    // if key exists...
+    if (this.table[position] !== undefined){
+      // check whether the value we're looking for is the the one at the specified position...
+      if (this.table[position].key === key){
+        // if so, DELETE the value...
+        this.table[position] = undefined;
+        // return this.table[position].value;
+      } else {
+        // otherwise need to check the next idx...
+        var idx = ++position;
+        while(this.table[idx] === undefined || this.table[idx].key !== key){
+          // break out once we find the position that contains the element and the element's key matches the key we're searching for...
+          idx++;
+        }
+        if (this.table[idx].key === key){
+          // verify the item is the one we want...
+          // return this.table[idx].value;
+          this.table[position] = undefined;
+        }
+      }
+    }
+    return undefined;
+  }
+
   // returns a specific value searched by the key...
   get(key){
     /* WITHOUT SEPARATE CHAINING COLLISION HANDLING...
-    return this.table[this.hashCode(key)];
+    return this.table[this.hashFunction(key)];
     */
     
     // SEPARATE CHAINING WAY OF DOING IT:
-    var postion = this.hashCode(key);
+    var postion = this.hashFunction(key);
     if (this.table[position] !== undefined){
       // iterate thru the LL to find the key
         // we know it's a LL, which has getHead() method
@@ -112,6 +171,31 @@ class HashTable {
       }
     }
     // key doesn't exist, nothing to get...
+    return undefined;
+  }
+
+  // LINEAR PROBING get method...
+  getProbe(key){
+    var position = this.hashFunction(key);
+    // if key exists...
+    if (this.table[position] !== undefined){
+      // check whether the value we're looking for is the the one at the specified position...
+      if (this.table[position].key === key){
+        // if so, return the value...
+        return this.table[position].value;
+      } else {
+        // otherwise need to check the next idx...
+        var idx = ++position;
+        while(this.table[idx] === undefined || this.table[idx].key !== key){
+          // break out once we find the position that contains the element and the element's key matches the key we're searching for...
+          idx++;
+        }
+        if (this.table[idx].key === key){
+          // verify the item is the one we want...
+          return this.table[idx].value;
+        }
+      }
+    }
     return undefined;
   }
 }
@@ -167,19 +251,24 @@ class LinkedList {
       // once at the last item (there is no next item) -> make the next item the node
       current.next = node;
     }
-    length++;
+    this.length++;
   }
 
   // remove from any position, given the index to remove at...
   removeAt(position){
-    if (position >= 0 && position < this.length){
+    console.log('IN LL REMOVE AT!!! position should be 1 - ', position);
+    console.log('length shoudl be 3?  - ', this.length);
+    if (position > -1 && position < this.length){
+      console.log('1');
       var current = this.head;
       var previous;
       var counter = 0;
       if (position === 0){
+        console.log('2');
         // if want to remove 1st element -> point head at 2nd element (element after this.head, cuz current == this.head)
         this.head = current.next;
       } else {
+        console.log('3');
           // iterate until desired position...
           while (counter++ < position){
             // keep reference to previous, cuz will need to link it to new item...
@@ -193,9 +282,11 @@ class LinkedList {
 
       }
       // for counting purposes...
-      length--;
+      this.length--;
+      console.log('4 removing (using removeAt) - ', current.element);
       return current.element;
     } else {
+      console.log('5');
       return null;
     }
   }
@@ -227,7 +318,7 @@ class LinkedList {
         // change link b/w previous and current
         previous.next = node;
       }
-      length++;
+      this.length++;
       return true;
     } else {
       return false;
@@ -237,7 +328,8 @@ class LinkedList {
   removeElement(element){
     // removing a particular element
     var idx = this.indexOf(element);
-    return this.removeAt(idx);
+    console.log('removing element - ', element, ' at idx - ', idx);
+    this.removeAt(idx);
   }
 
   // print out all elements in order in string form
@@ -274,7 +366,15 @@ class LinkedList {
   }
 
   getHead(){
-    return head;
+    return this.head;
   }
 
+}
+
+var print = function(table){
+  for (var i = 0; i < table.length; i++){
+    if (table[i] !== undefined){
+      console.log(i + ": " + table[i]);
+    }
+  }
 }
