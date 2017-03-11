@@ -2,6 +2,7 @@
 DATA STRUCTURE #5
 SET - collection of unordered, unique items (no repeats)
   * can imagine as an array w/ no repeated elements and w/ no concept of order
+  *SET == [key,key], as opposed to a DICTIONARY == [key,value]
 */
 
 class Set {
